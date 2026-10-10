@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2563eb">
+<title>Student Utility Hub</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--text:#152033;--muted:#667085;--line:#e4e9f0;--primary:#2563eb;--primary2:#1d4ed8;--soft:#eff6ff;--danger:#dc2626;--shadow:0 10px 28px #10204012}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+body.dark{--bg:#0b1220;--card:#111a2b;--text:#f3f6fb;--muted:#9aa7bd;--line:#263247;--soft:#14233e;--shadow:0 10px 28px #0005}
+button,input,select{font:inherit}button{cursor:pointer}
+.app{min-height:100vh;padding-bottom:52px}.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--card) 94%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav{max-width:1180px;margin:auto;padding:11px 15px;display:flex;align-items:center;gap:9px}.brand{font-size:18px;font-weight:800;flex:1}.brand b{color:var(--primary)}
+.nav button,.back{background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:11px;padding:9px 12px}.back{font-weight:650}
+main{max-width:1180px;margin:auto;padding:20px 15px}.hero{padding:28px;border-radius:24px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:white;box-shadow:var(--shadow)}.hero h1{font-size:clamp(28px,5vw,44px);margin:0 0 7px}.hero p{margin:0;opacity:.9}
+.search{display:flex;gap:8px;margin-top:19px}.search input{flex:1;border:0;border-radius:12px;padding:13px 15px;outline:0;color:#172033}.primary,.secondary{padding:11px 16px;border-radius:11px;font-weight:700}.primary{background:var(--primary);color:#fff}.primary:hover{background:var(--primary2)}.secondary{background:var(--soft);color:var(--primary)}
+.hero .primary{background:#fff;color:#1d4ed8}
+.section{display:flex;justify-content:space-between;align-items:center;margin:22px 0 12px}.section h2{margin:0;font-size:20px}.muted{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:var(--shadow);transition:.18s}.click{cursor:pointer}.click:hover{transform:translateY(-2px)}.emoji{font-size:30px}.card h3{margin:9px 0 5px}.card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}.tool{display:flex;gap:12px;align-items:flex-start}.tool .emoji{font-size:25px}.tool h3{margin:0;font-size:16px}.star{float:right;border:0;background:transparent;color:#f59e0b;font-size:21px;padding:0}
+.title{display:flex;align-items:center;gap:10px;margin-bottom:16px}.title h2{margin:0;flex:1}.calc{max-width:800px;margin:auto;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:var(--shadow)}.head{display:flex;gap:12px;align-items:center}.head .emoji{font-size:34px}.head h2{margin:0 0 3px}.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px;margin-top:18px}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}.field input,.field select{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--text);outline:0}.field input:focus,.field select:focus{border-color:var(--primary);box-shadow:0 0 0 3px #2563eb20}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}.result{margin-top:17px;padding:17px;border-radius:15px;background:var(--soft);border:1px solid #2563eb35}.result strong{font-size:22px}.line{margin-top:6px}.error{color:var(--danger);font-weight:700}.empty{text-align:center;padding:35px;color:var(--muted);grid-column:1/-1}
+footer{position:fixed;z-index:30;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);text-align:center;padding:9px;color:var(--muted);font-size:12px}
+@media(max-width:600px){main{padding:15px 12px}.hero{padding:22px;border-radius:20px}.grid{grid-template-columns:1fr 1fr}.card{padding:14px}.search{flex-direction:column}.search button{width:100%}.calc{padding:16px;border-radius:18px}}
+@media(max-width:400px){.grid{grid-template-columns:1fr}.nav .label{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><div class="nav">
+<button id="back" aria-label="Back">← <span class="label">Back</span></button>
+<div class="brand">🎓 <b>Student Utility</b> Hub</div>
+<button id="home" title="Home">⌂</button>
+<button id="theme" title="Dark/Light">🌙</button>
+</div></header>
+<main id="main"></main>
+<footer>It's Created Bhavesh Koli</footer>
+</div>
+<script>
+"use strict";
+const DATA={
+basic:{n:"Basic",i:"🧮",d:"Everyday calculators and converters",t:[
+["percentage","Percentage","Calculate a value as a percentage of a total.","%"],
+["average","Average","Find the average of multiple numbers.","📊"],
+["ratio","Ratio","Simplify a ratio.","⚖️"],
+["fraction","Fraction Calculator","Add, subtract, multiply and divide fractions.","½"],
+["unit","Unit Converter","Convert length, weight, temperature and time.","🔄"]]},
+finance:{n:"Finance",i:"💰",d:"Interest, tax, loans and savings tools",t:[
+["simpleInterest","Simple Interest","Calculate simple interest and total amount.","₹"],
+["compoundInterest","Compound Interest","Calculate compound interest and amount.","📈"],
+["profitLoss","Profit & Loss","Calculate profit or loss and percentage.","💹"],
+["discount","Discount","Calculate discount and final price.","🏷️"],
+["gst","GST","Calculate GST-inclusive or exclusive amount.","🧾"],
+["emi","EMI","Estimate monthly loan EMI.","🏦"],
+["salary","Salary","Estimate take-home and annual salary.","💼"],
+["savings","Savings","Calculate monthly savings and savings rate.","💰"]]},
+student:{n:"Student",i:"🎓",d:"Academic and student calculators",t:[
+["marks","Marks Calculator","Calculate total, average and percentage.","📝"],
+["cgpa","CGPA ↔ Percentage","Convert CGPA and percentage using 9.5.","🎯"],
+["attendance","Attendance","Calculate attendance and required classes.","📅"],
+["requiredMarks","Required Marks","Find marks needed for a target percentage.","🎯"],
+["grade","Grade","Find grade from percentage.","🏆"],
+["studyTime","Study Time","Divide available study time by subjects.","⏱️"],
+["age","Age Calculator","Calculate age from date of birth.","🎂"]]},
+daily:{n:"Daily Life",i:"⏱️",d:"Useful everyday calculations",t:[
+["dateDiff","Date Difference","Find days between two dates.","📆"],
+["timeDiff","Time Difference","Find duration between two times.","🕐"],
+["bmi","BMI","Calculate body mass index.","⚖️"],
+["calorie","Calorie","Estimate daily calorie needs.","🔥"],
+["speed","Speed–Distance–Time","Solve speed, distance or time.","🚗"],
+["fuel","Fuel Cost","Estimate trip fuel consumption and cost.","⛽"],
+["electricity","Electricity Bill","Estimate energy cost from units and rate.","💡"]]},
+math:{n:"Mathematics",i:"🔢",d:"Common mathematics and number tools",t:[
+["squareCube","Square / Cube","Calculate square and cube.","²"],
+["lcmHcf","LCM & HCF","Find LCM and HCF of integers.","🔢"],
+["prime","Prime Checker","Check whether an integer is prime.","🔍"],
+["numberSystem","Number System Converter","Convert decimal, binary, octal and hexadecimal.","🔁"],
+["powerRoot","Power & Root","Calculate powers and roots.","√"]]}
+};
+const M={};for(const [c,v] of Object.entries(DATA))for(const x of v.t)M[x[0]]={id:x[0],c,n:x[1],d:x[2],i:x[3]};
+let fav=JSON.parse(localStorage.suhFav||"[]"),recent=JSON.parse(localStorage.suhRecent||"[]"),view="home",cat=null,tool=null;
+const $=s=>document.querySelector(s), esc=s=>String(s??"").replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[x]));
+const fmt=x=>Number.isFinite(x)?new Intl.NumberFormat("en-IN",{maximumFractionDigits:4}).format(x):"—";
+const val=id=>$(("#"+id))?.value.trim()||"", num=id=>{let x=parseFloat(val(id));return Number.isFinite(x)?x:null};
+function save(){localStorage.suhFav=JSON.stringify(fav);localStorage.suhRecent=JSON.stringify(recent)}
+function toolCard(x){let f=fav.includes(x[0]);return `<div class="card click tool"><div class="emoji">${x[3]}</div><div style="flex:1"><button class="star" onclick="event.stopPropagation();toggleFav('${x[0]}')">${f?"★":"☆"}</button><h3>${esc(x[1])}</h3><p>${esc(x[2])}</p></div></div>`.replace('class="card click tool"',`class="card click tool" onclick="openTool('${x[0]}')"`);
+}
+function home(){view="home";cat=tool=null;let fs=fav.map(x=>M[x]).filter(Boolean),rs=recent.map(x=>M[x]).filter(Boolean);$("#main").innerHTML=`<section class="hero"><h1>Student Utility Hub</h1><p>Fast, practical and beginner-friendly tools for students and daily life.</p><div class="search"><input id="search" placeholder="🔎 Search all tools..." oninput="searchTools(this.value)"><button class="primary" onclick="searchTools(val('search'))">Search</button></div></section><div id="results"></div>${fs.length?`<div class="section"><h2>⭐ Favorites</h2></div><div class="grid">${fs.map(x=>toolCard([x.id,x.n,x.d,x.i])).join("")}</div>`:""}${rs.length?`<div class="section"><h2>🕘 Recently Used</h2></div><div class="grid">${rs.slice(0,6).map(x=>toolCard([x.id,x.n,x.d,x.i])).join("")}</div>`:""}<div class="section"><h2>Categories</h2></div><div class="grid">${Object.entries(DATA).map(([k,x])=>`<div class="card click" onclick="openCat('${k}')"><div class="emoji">${x.i}</div><h3>${x.n}</h3><p>${x.d}</p><div class="muted" style="margin-top:9px">${x.t.length} tools →</div></div>`).join("")}</div>`}
+function openCat(k,push=true){if(push)history.pushState({},'',location.href);view="cat";cat=k;tool=null;let x=DATA[k];$("#main").innerHTML=`<div class="title"><button class="back" onclick="goBack()">← Back</button><h2>${x.i} ${x.n}</h2></div><p class="muted">${x.d}</p><div class="grid" style="margin-top:15px">${x.t.map(toolCard).join("")}</div>`}
+function openTool(id,push=true){if(push)history.pushState({},'',location.href);tool=id;view="tool";recent=[id,...recent.filter(x=>x!==id)].slice(0,10);save();render(M[id])}
+function render(x){$("#main").innerHTML=`<div class="title"><button class="back" onclick="goBack()">← Back</button><h2>${x.i} ${esc(x.n)}</h2></div><div class="calc"><div class="head"><div class="emoji">${x.i}</div><div><h2>${esc(x.n)}</h2><div class="muted">${esc(x.d)}</div></div></div><div id="body"></div></div>`;build(x.id)}
+const F=a=>`<div class="fields">${a.map(x=>`<div class="field"><label>${x[1]}</label><input id="${x[0]}" type="${x[2]||"number"}" ${!x[2]||x[2]==="number"?'step="any"':""}></div>`).join("")}</div>`;
+const CT=`<div class="actions"><button class="primary" onclick="calc()">Calculate</button><button class="secondary" onclick="render(M[tool])">Reset / Clear</button></div><div id="out" class="result"><div class="muted">Enter values and press Calculate.</div></div>`;
+function build(id){let b="";
+switch(id){
+case"percentage":b=F([["p1","Value"],["p2","Total"]]);break;
+case"average":b=F([["a","Numbers (comma separated)","text"]]);break;
+case"ratio":b=F([["r1","First number"],["r2","Second number"]]);break;
+case"fraction":b=F([["fa","First numerator"],["fb","First denominator"],["fc","Second numerator"],["fd","Second denominator"]])+`<div class="field"><label>Operation</label><select id="fo"><option>+</option><option>-</option><option>×</option><option>÷</option></select></div>`;break;
+case"unit":b=`<div class="fields"><div class="field"><label>Category</label><select id="uc" onchange="unitOpts()"><option>length</option><option>weight</option><option>temperature</option><option>time</option></select></div>${F([["uv","Value"]])}</div><div class="fields"><div class="field"><label>From</label><select id="uf"></select></div><div class="field"><label>To</label><select id="ut"></select></div></div>`;break;
+case"simpleInterest":b=F([["p","Principal"],["r","Rate %"],["t","Time (years)"]]);break;
+case"compoundInterest":b=F([["p","Principal"],["r","Rate %"],["t","Time (years)"],["n","Compounds / year"]]);break;
+case"profitLoss":b=F([["c","Cost Price"],["s","Selling Price"]]);break;
+case"discount":b=F([["p","Marked Price"],["d","Discount %"]]);break;
+case"gst":b=F([["a","Amount"],["r","GST %"]])+`<div class="field"><label>Mode</label><select id="gt"><option value="add">Add GST</option><option value="remove">Remove GST</option></select></div>`;break;
+case"emi":b=F([["p","Loan Amount"],["r","Annual Interest %"],["t","Tenure (years)"]]);break;
+case"salary":b=F([["m","Monthly Gross Salary"],["d","Monthly Deductions"]]);break;
+case"savings":b=F([["i","Monthly Income"],["e","Monthly Expenses"]]);break;
+case"marks":b=F([["m","Marks (comma separated)","text"]]);break;
+case"cgpa":b=`<div class="field"><label>Conversion</label><select id="ct"><option value="c">CGPA → Percentage</option><option value="p">Percentage → CGPA</option></select></div>`+F([["v","Value"]]);break;
+case"attendance":b=F([["p","Classes Attended"],["t","Total Classes"],["r","Required Attendance %"]]);break;
+case"requiredMarks":b=F([["t","Total Marks"],["p","Current Marks"],["r","Target %"]]);break;
+case"grade":b=F([["p","Percentage"]]);break;
+case"studyTime":b=F([["m","Available Minutes"],["s","Number of Subjects"]]);break;
+case"age":b=`<div class="fields"><div class="field"><label>Date of Birth</label><input id="d" type="date"></div><div class="field"><label>As of Date</label><input id="a" type="date"></div></div>`;break;
+case"dateDiff":b=`<div class="fields"><div class="field"><label>Start Date</label><input id="d1" type="date"></div><div class="field"><label>End Date</label><input id="d2" type="date"></div></div>`;break;
+case"timeDiff":b=`<div class="fields"><div class="field"><label>Start Time</label><input id="t1" type="time"></div><div class="field"><label>End Time</label><input id="t2" type="time"></div></div>`;break;
+case"bmi":b=F([["w","Weight (kg)"],["h","Height (cm)"]]);break;
+case"calorie":b=`<div class="field"><label>Sex</label><select id="sx"><option value="m">Male</option><option value="f">Female</option></select></div>`+F([["a","Age"],["w","Weight (kg)"],["h","Height (cm)"]])+`<div class="field"><label>Activity</label><select id="ac"><option value="1.2">Sedentary</option><option value="1.375">Light</option><option value="1.55">Moderate</option><option value="1.725">Very active</option><option value="1.9">Extra active</option></select></div>`;break;
+case"speed":b=`<div class="field"><label>Solve for</label><select id="st"><option value="s">Speed</option><option value="d">Distance</option><option value="t">Time</option></select></div>`+F([["d","Distance (km)"],["t","Time (hours)"],["s","Speed (km/h)"]]);break;
+case"fuel":b=F([["d","Distance (km)"],["e","Efficiency (km/litre)"],["p","Fuel Price / litre"]]);break;
+case"electricity":b=F([["u","Units (kWh)"],["r","Rate / unit"]]);break;
+case"squareCube":b=F([["x","Number"]]);break;
+case"lcmHcf":b=F([["a","Integers (comma separated)","text"]]);break;
+case"prime":b=F([["x","Integer"]]);break;
+case"numberSystem":b=`<div class="field"><label>Input base</label><select id="base"><option value="10">Decimal</option><option value="2">Binary</option><option value="8">Octal</option><option value="16">Hexadecimal</option></select></div>`+F([["v","Number","text"]]);break;
+case"powerRoot":b=`<div class="field"><label>Operation</label><select id="pt"><option value="p">Power</option><option value="r">Root</option></select></div>`+F([["a","Number"],["b","Exponent / Root"]]);break;
+}
+$("#body").innerHTML=b+CT;if(id==="unit")unitOpts()}
+function set(html){$("#out").innerHTML=html+`<div class="actions"><button class="secondary" onclick="copyOut()">📋 Copy Result</button><button class="secondary" onclick="shareOut()">📤 Share Result</button></div>`}
+function err(s){$("#out").innerHTML=`<div class="error">⚠️ ${esc(s)}</div>`}
+function ok(...x){return x.every(v=>v!==null&&v!=="")}
+function gcd(a,b){while(b)[a,b]=[b,a%b];return Math.abs(a)}
+function prime(n){if(n<2)return false;if(n%2===0)return n===2;for(let i=3;i*i<=n;i+=2)if(n%i===0)return false;return true}
+const U={length:{m:1,km:1000,cm:.01,mm:.001,ft:.3048,in:.0254,mi:1609.344},weight:{kg:1,g:.001,mg:1e-6,lb:.45359237,oz:.0283495231},time:{sec:1,min:60,hour:3600,day:86400},temperature:{C:0,F:0,K:0}};
+const UN={m:"Metre",km:"Kilometre",cm:"Centimetre",mm:"Millimetre",ft:"Foot",in:"Inch",mi:"Mile",kg:"Kilogram",g:"Gram",mg:"Milligram",lb:"Pound",oz:"Ounce",sec:"Second",min:"Minute",hour:"Hour",day:"Day",C:"Celsius",F:"Fahrenheit",K:"Kelvin"};
+function unitOpts(){let c=val("uc"),a=Object.keys(U[c]);$("#uf").innerHTML=a.map(x=>`<option value="${x}">${UN[x]}</option>`).join("");$("#ut").innerHTML=a.map(x=>`<option value="${x}">${UN[x]}</option>`).join("");if(a[1])$("#ut").value=a[1]}
+function unitCalc(){let c=val("uc"),x=num("uv"),f=val("uf"),t=val("ut");if(x===null)throw Error("Enter a valid value.");let z;if(c==="temperature"){let k=f==="C"?x:f==="F"?(x-32)*5/9:x-273.15;k=f==="C"?x+273.15:f==="F"?(x-32)*5/9+273.15:x;if(t==="C")z=k-273.15;else if(t==="F")z=(k-273.15)*9/5+32;else z=k}else z=x*U[c][f]/U[c][t];set(`<strong>${fmt(z)} ${UN[t]}</strong><div class="line">${fmt(x)} ${UN[f]} = ${fmt(z)} ${UN[t]}</div>`)}
+function calc(){try{let id=tool;
+if(id==="percentage"){let a=num("p1"),b=num("p2");if(!ok(a,b)||b===0)throw Error("Enter valid values and a non-zero total.");set(`<strong>${fmt(a/b*100)}%</strong>`)}
+else if(id==="average"){let a=val("a").split(",").map(Number);if(!a.length||a.some(x=>!Number.isFinite(x)))throw Error("Enter numbers separated by commas.");set(`<strong>${fmt(a.reduce((x,y)=>x+y,0)/a.length)}</strong><div class="line">Count: ${a.length}</div>`)}
+else if(id==="ratio"){let a=num("r1"),b=num("r2");if(!ok(a,b)||b===0)throw Error("Enter valid numbers.");let g=gcd(a,b);set(`<strong>${fmt(a/g)} : ${fmt(b/g)}</strong>`)}
+else if(id==="fraction"){let a=num("fa"),b=num("fb"),c=num("fc"),d=num("fd"),o=val("fo");if(!ok(a,b,c,d)||b===0||d===0)throw Error("Denominators must not be zero.");let n=o==="+"?a*d+c*b:o==="-"?a*d-c*b:o==="×"?a*c:a*d,den=o==="+"||o==="-"?b*d:o==="×"?b*d:b*c;if(!den)throw Error("Division by zero.");let g=gcd(n,den);set(`<strong>${fmt(n/g)}/${fmt(den/g)}</strong><div class="line">Decimal: ${fmt(n/den)}</div>`)}
+else if(id==="unit")unitCalc();
+else if(id==="simpleInterest"){let p=num("p"),r=num("r"),t=num("t");if(!ok(p,r,t)||p<0||r<0||t<0)throw Error("Enter valid non-negative values.");let i=p*r*t/100;set(`<strong>Interest: ₹${fmt(i)}</strong><div class="line">Amount: ₹${fmt(p+i)}</div>`)}
+else if(id==="compoundInterest"){let p=num("p"),r=num("r"),t=num("t"),n=num("n");if(!ok(p,r,t,n)||p<0||r<0||t<0||n<=0)throw Error("Enter valid values.");let a=p*Math.pow(1+r/(100*n),n*t);set(`<strong>Amount: ₹${fmt(a)}</strong><div class="line">Interest: ₹${fmt(a-p)}</div>`)}
+else if(id==="profitLoss"){let c=num("c"),s=num("s");if(!ok(c,s)||c<=0)throw Error("Cost price must be greater than zero.");let d=s-c;set(`<strong>${d>=0?"Profit":"Loss"}: ₹${fmt(Math.abs(d))}</strong><div class="line">${d>=0?"Profit":"Loss"}: ${fmt(Math.abs(d)/c*100)}%</div>`)}
+else if(id==="discount"){let p=num("p"),d=num("d");if(!ok(p,d)||p<0||d<0||d>100)throw Error("Discount must be 0–100%.");set(`<strong>Final Price: ₹${fmt(p*(1-d/100))}</strong><div class="line">Discount: ₹${fmt(p*d/100)}</div>`)}
+else if(id==="gst"){let a=num("a"),r=num("r");if(!ok(a,r)||a<0||r<0)throw Error("Enter valid values.");if(val("gt")==="add")set(`<strong>Total: ₹${fmt(a*(1+r/100))}</strong><div class="line">GST: ₹${fmt(a*r/100)}</div>`);else{let base=a/(1+r/100);set(`<strong>Base: ₹${fmt(base)}</strong><div class="line">GST: ₹${fmt(a-base)}</div>`)}}
+else if(id==="emi"){let p=num("p"),r=num("r"),t=num("t");if(!ok(p,r,t)||p<=0||r<0||t<=0)throw Error("Enter valid loan details.");let m=t*12,q=r/1200,e=q===0?p/m:p*q*Math.pow(1+q,m)/(Math.pow(1+q,m)-1);set(`<strong>Monthly EMI: ₹${fmt(e)}</strong><div class="line">Total Payment: ₹${fmt(e*m)}</div><div class="line">Interest: ₹${fmt(e*m-p)}</div>`)}
+else if(id==="salary"){let m=num("m"),d=num("d");if(!ok(m,d)||m<0||d<0)throw Error("Enter valid salary values.");set(`<strong>Take-home: ₹${fmt(Math.max(0,m-d))}</strong><div class="line">Annual Gross: ₹${fmt(m*12)}</div>`)}
+else if(id==="savings"){let i=num("i"),e=num("e");if(!ok(i,e)||i<0||e<0)throw Error("Enter valid values.");set(`<strong>Monthly Savings: ₹${fmt(i-e)}</strong><div class="line">Savings Rate: ${i?fmt((i-e)/i*100):0}%</div>`)}
+else if(id==="marks"){let a=val("m").split(",").map(Number);if(!a.length||a.some(x=>!Number.isFinite(x)||x<0))throw Error("Enter valid marks separated by commas.");let t=a.reduce((x,y)=>x+y,0);set(`<strong>${fmt(t/a.length)} average</strong><div class="line">Total: ${fmt(t)} / ${a.length*100}</div><div class="line">Percentage: ${fmt(t/(a.length*100)*100)}%</div>`)}
+else if(id==="cgpa"){let x=num("v");if(!ok(x)||x<0)throw Error("Enter a valid value.");set(val("ct")==="c"?`<strong>${fmt(x*9.5)}%</strong>`:`<strong>${fmt(x/9.5)} CGPA</strong>`)}
+else if(id==="attendance"){let p=num("p"),t=num("t"),r=num("r");if(!ok(p,t,r)||t<=0||p<0||p>t||r<0||r>100)throw Error("Enter valid attendance values.");let cur=p/t*100,n=cur>=r?0:Math.ceil((r*t-p)/(1-r/100));set(`<strong>${fmt(cur)}%</strong><div class="line">${n?`Attend ${n} more consecutive classes to reach ${fmt(r)}%.`:"Target attendance already reached."}</div>`)}
+else if(id==="requiredMarks"){let t=num("t"),p=num("p"),r=num("r");if(!ok(t,p,r)||t<=0||p<0||r<0||r>100)throw Error("Enter valid values.");set(`<strong>${fmt(Math.max(0,t*r/100-p))} marks needed</strong>`)}
+else if(id==="grade"){let p=num("p");if(!ok(p)||p<0||p>100)throw Error("Percentage must be 0–100.");let g=p>=90?"A+":p>=80?"A":p>=70?"B":p>=60?"C":p>=50?"D":p>=40?"E":"F";set(`<strong>Grade: ${g}</strong>`)}
+else if(id==="studyTime"){let m=num("m"),s=num("s");if(!ok(m,s)||m<0||s<=0)throw Error("Enter valid values.");set(`<strong>${fmt(m/s)} minutes / subject</strong>`)}
+else if(id==="age"){let d=new Date(val("d")+"T00:00:00"),a=new Date((val("a")||new Date().toISOString().slice(0,10))+"T00:00:00");if(!val("d")||isNaN(d)||d>a)throw Error("Enter a valid date of birth.");let y=a.getFullYear()-d.getFullYear(),m=a.getMonth()-d.getMonth(),day=a.getDate()-d.getDate();if(day<0){m--;day+=new Date(a.getFullYear(),a.getMonth(),0).getDate()}if(m<0){y--;m+=12}set(`<strong>${y} years</strong><div class="line">${m} months, ${day} days</div>`)}
+else if(id==="dateDiff"){let a=new Date(val("d1")+"T00:00:00"),b=new Date(val("d2")+"T00:00:00");if(!val("d1")||!val("d2"))throw Error("Select both dates.");let n=Math.round(Math.abs(b-a)/86400000);set(`<strong>${fmt(n)} days</strong><div class="line">${fmt(n/7)} weeks approximately</div>`)}
+else if(id==="timeDiff"){let a=tm(val("t1")),b=tm(val("t2"));if(a<0||b<0)throw Error("Select both times.");let n=b-a;if(n<0)n+=1440;set(`<strong>${Math.floor(n/60)}h ${n%60}m</strong><div class="line">${n} minutes</div>`)}
+else if(id==="bmi"){let w=num("w"),h=num("h");if(!ok(w,h)||w<=0||h<=0)throw Error("Enter valid height and weight.");let b=w/(h/100)**2,c=b<18.5?"Underweight":b<25?"Normal range":b<30?"Overweight":"Obesity";set(`<strong>BMI: ${fmt(b)}</strong><div class="line">${c}</div>`)}
+else if(id==="calorie"){let a=num("a"),w=num("w"),h=num("h"),ac=num("ac");if(!ok(a,w,h,ac)||a<=0||w<=0||h<=0)throw Error("Enter valid details.");let b=val("sx")==="m"?10*w+6.25*h-5*a+5:10*w+6.25*h-5*a-161;set(`<strong>${fmt(b*ac)} kcal/day</strong><div class="line">Estimated BMR: ${fmt(b)} kcal/day</div>`)}
+else if(id==="speed"){let d=num("d"),t=num("t"),s=num("s"),z=val("st");if(z==="s"){if(!ok(d,t)||t<=0)throw Error("Enter distance and non-zero time.");set(`<strong>${fmt(d/t)} km/h</strong>`)}else if(z==="d"){if(!ok(s,t))throw Error("Enter speed and time.");set(`<strong>${fmt(s*t)} km</strong>`)}else{if(!ok(d,s)||s===0)throw Error("Enter distance and non-zero speed.");set(`<strong>${fmt(d/s)} hours</strong>`)}}
+else if(id==="fuel"){let d=num("d"),e=num("e"),p=num("p");if(!ok(d,e,p)||d<0||e<=0||p<0)throw Error("Enter valid values.");let l=d/e;set(`<strong>Fuel Cost: ₹${fmt(l*p)}</strong><div class="line">Fuel: ${fmt(l)} litres</div>`)}
+else if(id==="electricity"){let u=num("u"),r=num("r");if(!ok(u,r)||u<0||r<0)throw Error("Enter valid values.");set(`<strong>Estimated Bill: ₹${fmt(u*r)}</strong><div class="line">${fmt(u)} units × ₹${fmt(r)}</div>`)}
+else if(id==="squareCube"){let x=num("x");if(x===null)throw Error("Enter a number.");set(`<strong>Square: ${fmt(x*x)}</strong><div class="line">Cube: ${fmt(x*x*x)}</div>`)}
+else if(id==="lcmHcf"){let a=val("a").split(",").map(Number);if(a.length<2||a.some(x=>!Number.isInteger(x)||x===0))throw Error("Enter at least two non-zero integers.");let h=a.reduce((x,y)=>gcd(x,y)),l=a.reduce((x,y)=>Math.abs(x*y)/gcd(x,y));set(`<strong>HCF: ${fmt(h)}</strong><div class="line">LCM: ${fmt(l)}</div>`)}
+else if(id==="prime"){let x=num("x");if(!Number.isInteger(x)||x<0)throw Error("Enter a non-negative integer.");set(`<strong>${x} is ${prime(x)?"Prime":"Not Prime"}</strong>`)}
+else if(id==="numberSystem"){let b=Number(val("base")),v=val("v"),n=parseInt(v,b);if(!v||!Number.isInteger(n)||n<0)throw Error("Enter a valid non-negative integer for the selected base.");set(`<strong>Decimal: ${n}</strong><div class="line">Binary: ${n.toString(2)}</div><div class="line">Octal: ${n.toString(8)}</div><div class="line">Hex: ${n.toString(16).toUpperCase()}</div>`)}
+else if(id==="powerRoot"){let a=num("a"),b=num("b");if(!ok(a,b))throw Error("Enter both values.");if(val("pt")==="p")set(`<strong>${fmt(a**b)}</strong>`);else if(b===0)throw Error("Root cannot be zero.");else set(`<strong>${fmt(a**(1/b))}</strong>`)}
+}catch(e){err(e.message||"Check your inputs.")}
+}
+function tm(s){if(!s)return -1;let a=s.split(":").map(Number);return a[0]*60+a[1]}
+function toggleFav(id){fav=fav.includes(id)?fav.filter(x=>x!==id):[id,...fav];save();view==="home"?home():view==="cat"?openCat(cat,false):render(M[tool])}
+function searchTools(q){q=q.toLowerCase().trim();let a=Object.values(M).filter(x=>(x.n+" "+x.d).toLowerCase().includes(q));$("#results").innerHTML=`<div class="section"><h2>Search Results</h2><span class="muted">${a.length} found</span></div><div class="grid">${a.length?a.map(x=>toolCard([x.id,x.n,x.d,x.i])).join(""):`<div class="empty">No matching tools found.</div>`}</div>`}
+function goBack(){if(view==="tool")openCat(M[tool].c,false);else if(view==="cat")home();else home()}
+function copyOut(){let t=$("#out").innerText.replace(/📋.*|📤.*/g,"").trim();navigator.clipboard?.writeText(t).then(()=>alert("Result copied."))}
+function shareOut(){let t=$("#out").innerText.trim();if(navigator.share)navigator.share({title:M[tool].n,text:t}).catch(()=>{});else copyOut()}
+$("#home").onclick=()=>{history.replaceState({},'',location.href);home()};$("#back").onclick=()=>{history.replaceState({},'',location.href);goBack()};$("#theme").onclick=()=>{document.body.classList.toggle("dark");localStorage.suhTheme=document.body.classList.contains("dark")?"dark":"light";$("#theme").textContent=document.body.classList.contains("dark")?"☀️":"🌙"};
+window.onpopstate=()=>goBack();
+if(localStorage.suhTheme==="dark"){document.body.classList.add("dark");$("#theme").textContent="☀️"}history.replaceState({},'',location.href);home();
+</script>
+</body>
+</html>
